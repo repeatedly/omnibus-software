@@ -28,18 +28,24 @@
 #   https://www.openssl.org/news/secadv_20140806.txt
 
 name "openssl-windows"
-default_version "1.0.0n"
+default_version "1.0.0r"
 
 dependency "ruby-windows"
 
-source url: "http://packages.openknapsack.org/openssl/openssl-#{version}-x86-windows.tar.lzma",
-       md5: "9506530353f3b984680ec27b7270874a"
+source url: "http://packages.openknapsack.org/openssl/openssl-#{version}-x86-windows.tar.lzma"
+
+version('1.0.0n') { source md5: "9506530353f3b984680ec27b7270874a" }
+
+version('1.0.0r') {
+  source md5: "84f67da79bd1f3ab45c0ca2578c29282",
+         url: "https://github.com/jdmundrawala/knapsack-recipes/releases/download/openssl-1.0.0r/openssl-1.0.0r-x86-windows.tar.lzma"
+}
 
 build do
   # Make sure the OpenSSL version is suitable for our path:
   # OpenSSL version is something like
   # OpenSSL 1.0.0k 5 Feb 2013
-  ruby "-e \"require 'openssl'; puts 'OpenSSL patch version check expecting <= 1.0.0m'; exit(1) if OpenSSL::OPENSSL_VERSION.split(' ')[1] >= '1.0.0n'\""
+  ruby "-e \"require 'openssl'; puts 'OpenSSL patch version check expecting <= #{version}'; exit(1) if OpenSSL::OPENSSL_VERSION.split(' ')[1] >= '#{version}'\""
 
   temp_directory = File.join(Config.cache_dir, "openssl-cache")
 
